@@ -6,4 +6,18 @@ if (Meteor.isClient) {
       return Tasks.find({});
     }
   });
+
+  Template.body.events({
+    "submit .new-task": function (e) {
+      var text = e.target.text.value;
+
+      Tasks.insert({
+        text: text,
+        createdAt: new Date()
+      });
+
+      e.target.text.value = "";
+      return false;
+    }
+  });
 }
