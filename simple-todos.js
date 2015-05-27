@@ -1,6 +1,8 @@
 Tasks = new Mongo.Collection("tasks");
 
 if (Meteor.isClient) {
+  Meteor.subscribe("tasks");
+
   Template.body.helpers({
     tasks: function () {
       if (Session.get("hideCompleted")) {
@@ -44,6 +46,17 @@ if (Meteor.isClient) {
 
   Accounts.ui.config({
     passwordSignupFields: "USERNAME_ONLY"
+  });
+}
+
+if (Meteor.isServer) {
+  Meteor.publish("tasks", function (){
+    return Tasks.find({
+      $or: [
+        { private: {$ne: true} },
+        { owner: this.userId }
+      ]
+    });
   });
 }
 
