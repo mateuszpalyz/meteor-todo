@@ -19,6 +19,12 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.task.helpers({
+    isOwner: function () {
+      return this.owner === Meteor.userId();
+    }
+  });
+
   Template.body.events({
     "submit .new-task": function (e) {
       var text = e.target.text.value;
